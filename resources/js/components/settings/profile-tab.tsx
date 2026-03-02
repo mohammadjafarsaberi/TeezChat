@@ -67,7 +67,7 @@ export default function ProfileTab({
                     <>
                         <div className="grid gap-2">
                             <Label htmlFor="avatar">Avatar</Label>
-                            <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-4">
                                 <div className="relative">
                                     <Avatar className="h-20 w-20">
                                         <AvatarImage
@@ -188,16 +188,16 @@ export default function ProfileTab({
                                 Save
                             </Button>
 
-                            <Transition
+                                    <Transition
                                 show={recentlySuccessful}
                                 enter="transition ease-in-out"
                                 enterFrom="opacity-0"
                                 leave="transition ease-in-out"
                                 leaveTo="opacity-0"
                             >
-                                <p className="text-sm text-neutral-600">
-                                    Saved
-                                </p>
+                                        <p className="text-sm text-muted-foreground">
+                                            Saved
+                                        </p>
                             </Transition>
                         </div>
                     </>

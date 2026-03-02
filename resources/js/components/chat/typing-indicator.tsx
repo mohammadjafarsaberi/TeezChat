@@ -20,9 +20,9 @@ export function TypingIndicator({ users }: TypingIndicatorProps) {
         <div className="px-4 py-2">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <div className="flex gap-1">
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.3s]" />
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.15s]" />
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400" />
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-brand-accent [animation-delay:-0.3s]" />
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-brand-accent [animation-delay:-0.15s]" />
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-brand-accent" />
                 </div>
                 <span>{text}</span>
             </div>

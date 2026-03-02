@@ -14,11 +14,13 @@ import { store } from '@/routes/register';
 
 export default function Register() {
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+    const [namePreview, setNamePreview] = useState<string>('');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const getInitials = (name: string) => {
         return name
             .split(' ')
+            .filter(Boolean)
             .map((n) => n[0])
             .join('')
             .toUpperCase()
@@ -56,13 +58,18 @@ export default function Register() {
                                 <Label htmlFor="avatar">Profile Photo (Optional)</Label>
                                 <div className="flex items-center gap-4">
                                     <div className="relative">
-                                        <Avatar className="h-20 w-20">
+                                        <Avatar className="h-20 w-20 border border-border bg-card">
                                             <AvatarImage
                                                 src={avatarPreview || undefined}
                                                 alt="Avatar preview"
                                             />
-                                            <AvatarFallback className="bg-brand-gradient text-lg font-semibold text-brand-accent">
-                                                {avatarPreview ? '?' : '?'}
+                                            <AvatarFallback className="text-lg font-semibold text-brand-primary">
+                                                {avatarPreview
+                                                    ? ''
+                                                    : getInitials(
+                                                        namePreview ||
+                                                        'Teez Chat',
+                                                    )}
                                             </AvatarFallback>
                                         </Avatar>
                                         <button
@@ -109,6 +116,9 @@ export default function Register() {
                                     autoComplete="name"
                                     name="name"
                                     placeholder="Full name"
+                                    onChange={(event) =>
+                                        setNamePreview(event.target.value)
+                                    }
                                 />
                                 <InputError
                                     message={errors.name}

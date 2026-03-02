@@ -123,6 +123,65 @@
     --brand-accent: oklch(0.76 0.2 150);
 }
 
+:root {
+    /* Deep, modern dark base with a subtle blue/teal cast */
+    --background: oklch(0.16 0.03 250);
+    --foreground: oklch(0.93 0.02 250);
+
+    --card: oklch(0.19 0.03 250);
+    --card-foreground: var(--foreground);
+
+    --popover: oklch(0.19 0.03 250);
+    --popover-foreground: var(--foreground);
+
+    /* Primary accent: vivid green used in hero text and CTAs */
+    --primary: oklch(0.72 0.22 149.5);
+    --primary-foreground: oklch(0.99 0 0);
+
+    /* Supporting neutrals tuned for dark UI */
+    --secondary: oklch(0.22 0.02 250);
+    --secondary-foreground: var(--foreground);
+
+    --muted: oklch(0.20 0.02 250);
+    --muted-foreground: oklch(0.75 0.03 250);
+
+    --accent: oklch(0.22 0.04 230);
+    --accent-foreground: var(--foreground);
+
+    --destructive: oklch(0.6 0.2 25);
+    --destructive-foreground: oklch(0.99 0 0);
+
+    --border: oklch(0.24 0.02 250);
+    --input: var(--border);
+    --ring: oklch(0.7 0.16 149.5);
+
+    --chart-1: var(--primary);
+    --chart-2: oklch(0.68 0.18 150);
+    --chart-3: oklch(0.63 0.14 150);
+    --chart-4: oklch(0.78 0.2 150);
+    --chart-5: oklch(0.72 0.18 150);
+
+    --radius: 0.625rem;
+
+    /* Sidebar aligned with overall dark shell */
+    --sidebar: oklch(0.14 0.03 250);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--accent);
+    --sidebar-accent-foreground: var(--accent-foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
+
+    /* Brand colors mapped to the primary green system */
+    --brand-primary: var(--primary);
+    --brand-primary-foreground: var(--primary-foreground);
+    --brand-secondary: oklch(0.70 0.20 149.5);
+    --brand-secondary-foreground: var(--primary-foreground);
+    --brand-muted: oklch(0.22 0.03 250);
+    --brand-accent: oklch(0.76 0.22 149.5);
+}
+
 @layer base {
     * {
         @apply border-border;
@@ -135,19 +194,21 @@
 
 @layer utilities {
     .bg-brand-gradient {
+        /* Dark, immersive hero background matching the landing screenshot */
         background: linear-gradient(
             to bottom right,
-            oklch(0.95 0.03 150),
-            oklch(0.98 0.01 150),
-            oklch(0.9 0.05 150)
+            oklch(0.18 0.03 250),
+            oklch(0.14 0.04 250),
+            oklch(0.18 0.05 220)
         );
     }
 
     .bg-brand-gradient-text {
+        /* Vivid green accent used for key headlines */
         background: linear-gradient(
             to right,
-            oklch(0.723 0.219 149.579),
-            oklch(0.75 0.18 150)
+            oklch(0.72 0.22 149.5),
+            oklch(0.78 0.22 149.5)
         );
         -webkit-background-clip: text;
         background-clip: text;
