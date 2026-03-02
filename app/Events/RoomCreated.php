@@ -14,6 +14,20 @@ class RoomCreated implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
+     * The name of the queue connection to use when broadcasting the event.
+     *
+     * @var string|null
+     */
+    public $connection = 'sync';
+
+    /**
+     * The name of the queue the job should be sent to.
+     *
+     * @var string|null
+     */
+    public $queue = null;
+
+    /**
      * Create a new event instance.
      */
     public function __construct(
@@ -54,11 +68,11 @@ class RoomCreated implements ShouldBroadcast
         return [
             'id' => $this->room->id,
             'name' => $this->room->name,
-                'created_by' => [
-                    'id' => $this->room->creator->id,
-                    'name' => $this->room->creator->name,
-                    'avatar' => $this->room->creator->avatar ? asset('storage/'.$this->room->creator->avatar) : null,
-                ],
+            'created_by' => [
+                'id' => $this->room->creator->id,
+                'name' => $this->room->creator->name,
+                'avatar' => $this->room->creator->avatar ? asset('storage/'.$this->room->creator->avatar) : null,
+            ],
             'member_count' => $this->room->users->count(),
             'last_message' => $this->room->lastMessage->first() ? [
                 'id' => $this->room->lastMessage->first()->id,
