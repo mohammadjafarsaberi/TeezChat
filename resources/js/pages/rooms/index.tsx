@@ -1,6 +1,7 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Clock, LogIn, MessageCircle, Plus, Users } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -62,12 +63,7 @@ interface RoomsIndexProps extends Props {
 
 export default function RoomsIndex({ rooms: initialRooms, roomClosedRefresh, closedRoomId }: RoomsIndexProps) {
     const { auth } = usePage().props;
-    const currentUser = auth.user as {
-        id: number;
-        name: string;
-        email: string;
-        avatar?: string | null;
-    };
+    const currentUser = auth.user;
     const [rooms, setRooms] = useState(initialRooms);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [roomName, setRoomName] = useState('');
@@ -160,7 +156,7 @@ export default function RoomsIndex({ rooms: initialRooms, roomClosedRefresh, clo
                     console.error('Error joining room:', errors);
                     alert(
                         errors.message ||
-                            'Failed to join room. Please try again.',
+                        'Failed to join room. Please try again.',
                     );
                 },
                 onFinish: () => {
@@ -202,10 +198,10 @@ export default function RoomsIndex({ rooms: initialRooms, roomClosedRefresh, clo
                                             className="h-10 w-10 rounded-full p-0"
                                         >
                                             <Avatar className="h-10 w-10">
-                                <AvatarImage
-                                    src={currentUser.avatar || undefined}
-                                    alt={currentUser.name}
-                                />
+                                                <AvatarImage
+                                                    src={currentUser.avatar || undefined}
+                                                    alt={currentUser.name}
+                                                />
                                                 <AvatarFallback className="bg-brand-gradient text-sm font-semibold text-brand-accent">
                                                     {getInitials(currentUser.name)}
                                                 </AvatarFallback>
@@ -257,30 +253,64 @@ export default function RoomsIndex({ rooms: initialRooms, roomClosedRefresh, clo
 
                 <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
                     {rooms.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-12 sm:py-20">
-                            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted sm:h-20 sm:w-20">
+                        <motion.div
+                            className="flex flex-col items-center justify-center py-12 sm:py-20"
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.22, ease: [0.2, 0.8, 0.4, 1] }}
+                        >
+                            <motion.div
+                                className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted sm:h-20 sm:w-20"
+                                initial={{ scale: 0.94, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{ duration: 0.22 }}
+                            >
                                 <MessageCircle className="h-8 w-8 text-muted-foreground sm:h-10 sm:w-10" />
-                            </div>
+                            </motion.div>
                             <h2 className="mb-2 text-lg font-semibold text-foreground sm:text-xl">
                                 No rooms yet
                             </h2>
                             <p className="mb-6 text-center text-sm text-muted-foreground sm:text-base">
                                 Create your first room to start chatting!
                             </p>
-                            <Button
-                                onClick={() => setIsCreateModalOpen(true)}
-                                size="lg"
+                            <motion.div
+                                whileHover={{ y: -1 }}
+                                whileTap={{ scale: 0.98 }}
+                                transition={{ type: 'spring', stiffness: 260, damping: 22 }}
                             >
-                                <Plus className="mr-2 h-4 w-4" />
-                                Create Room
-                            </Button>
-                        </div>
+                                <Button
+                                    onClick={() => setIsCreateModalOpen(true)}
+                                    size="lg"
+                                >
+                                    <Plus className="mr-2 h-4 w-4" />
+                                    Create Room
+                                </Button>
+                            </motion.div>
+                        </motion.div>
                     ) : (
-                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        <motion.div
+                            className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+                            initial="hidden"
+                            animate="visible"
+                            variants={{
+                                hidden: {},
+                                visible: {
+                                    transition: { staggerChildren: 0.04 },
+                                },
+                            }}
+                        >
                             {rooms.map((room) => (
-                                <div
+                                <motion.div
                                     key={room.id}
-                                    className="group animate-in rounded-xl border border-border bg-card p-4 shadow-sm transition-all fade-in slide-in-from-bottom-4 hover:scale-[1.02] hover:border-brand-primary hover:shadow-lg sm:p-6"
+                                    className="group rounded-xl border border-border bg-card p-4 shadow-sm transition-all hover:scale-[1.02] hover:border-brand-primary hover:shadow-lg sm:p-6"
+                                    variants={{
+                                        hidden: { opacity: 0, y: 12 },
+                                        visible: { opacity: 1, y: 0 },
+                                    }}
+                                    transition={{
+                                        duration: 0.22,
+                                        ease: [0.2, 0.8, 0.4, 1],
+                                    }}
                                 >
                                     <div className="mb-3 flex items-start justify-between gap-2">
                                         <Link
@@ -331,24 +361,39 @@ export default function RoomsIndex({ rooms: initialRooms, roomClosedRefresh, clo
                                         </div>
 
                                         {!room.is_member && !room.is_full && (
-                                            <Button
-                                                size="sm"
-                                                onClick={(e) =>
-                                                    handleJoinRoom(room.id, e)
-                                                }
-                                                disabled={
-                                                    joiningRoomId === room.id
-                                                }
+                                            <motion.div
+                                                whileHover={{ y: -0.5 }}
+                                                whileTap={{ scale: 0.97 }}
+                                                transition={{
+                                                    type: 'spring',
+                                                    stiffness: 260,
+                                                    damping: 22,
+                                                }}
                                             >
-                                                {joiningRoomId === room.id ? (
-                                                    <>Joining...</>
-                                                ) : (
-                                                    <>
-                                                        <LogIn className="mr-1 h-3 w-3" />
-                                                        Join
-                                                    </>
-                                                )}
-                                            </Button>
+                                                <Button
+                                                    size="sm"
+                                                    onClick={(e) =>
+                                                        handleJoinRoom(
+                                                            room.id,
+                                                            e,
+                                                        )
+                                                    }
+                                                    disabled={
+                                                        joiningRoomId ===
+                                                        room.id
+                                                    }
+                                                >
+                                                    {joiningRoomId ===
+                                                        room.id ? (
+                                                        <>Joining...</>
+                                                    ) : (
+                                                        <>
+                                                            <LogIn className="mr-1 h-3 w-3" />
+                                                            Join
+                                                        </>
+                                                    )}
+                                                </Button>
+                                            </motion.div>
                                         )}
 
                                         {room.is_member && (
@@ -360,9 +405,9 @@ export default function RoomsIndex({ rooms: initialRooms, roomClosedRefresh, clo
                                             </Link>
                                         )}
                                     </div>
-                                </div>
+                                </motion.div>
                             ))}
-                        </div>
+                        </motion.div>
                     )}
                 </main>
 
@@ -412,60 +457,60 @@ export default function RoomsIndex({ rooms: initialRooms, roomClosedRefresh, clo
                     </DialogContent>
                 </Dialog>
 
-            {/* Room Closed Dialog (shown when user refreshes after room is closed) */}
-            {showRoomClosedDialog && (
-                <>
-                    {/* Full-screen overlay to block all interactions */}
-                    <div
-                        className="fixed inset-0 z-[100] bg-black/90"
-                        onClick={(e) => e.stopPropagation()}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Escape') {
-                                e.preventDefault();
-                                e.stopPropagation();
-                            }
-                        }}
-                    />
+                {/* Room Closed Dialog (shown when user refreshes after room is closed) */}
+                {showRoomClosedDialog && (
+                    <>
+                        {/* Full-screen overlay to block all interactions */}
+                        <div
+                            className="fixed inset-0 z-100 bg-black/90"
+                            onClick={(e) => e.stopPropagation()}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Escape') {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                }
+                            }}
+                        />
 
-                    <Dialog
-                        open={showRoomClosedDialog}
-                        onOpenChange={() => {}}
-                        modal={true}
-                    >
-                        <DialogContent
-                            className="pointer-events-auto z-[101] max-w-md"
-                            onEscapeKeyDown={(e) => e.preventDefault()}
-                            onPointerDownOutside={(e) => e.preventDefault()}
-                            onInteractOutside={(e) => e.preventDefault()}
+                        <Dialog
+                            open={showRoomClosedDialog}
+                            onOpenChange={() => { }}
+                            modal={true}
                         >
-                            <DialogHeader>
-                                <DialogTitle className="text-xl">
-                                    Room Closed
-                                </DialogTitle>
-                                <DialogDescription className="text-base">
-                                    The room you were viewing has been
-                                    permanently closed by the creator. This room
-                                    and all its messages are no longer
-                                    accessible. Please click the button below to
-                                    browse other available rooms or create a new
-                                    one.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                                <Button
-                                    variant="default"
-                                    onClick={() => {
-                                        setShowRoomClosedDialog(false);
-                                    }}
-                                    className="w-full"
-                                >
-                                    Continue
-                                </Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
-                </>
-            )}
+                            <DialogContent
+                                className="pointer-events-auto z-101 max-w-md"
+                                onEscapeKeyDown={(e) => e.preventDefault()}
+                                onPointerDownOutside={(e) => e.preventDefault()}
+                                onInteractOutside={(e) => e.preventDefault()}
+                            >
+                                <DialogHeader>
+                                    <DialogTitle className="text-xl">
+                                        Room Closed
+                                    </DialogTitle>
+                                    <DialogDescription className="text-base">
+                                        The room you were viewing has been
+                                        permanently closed by the creator. This room
+                                        and all its messages are no longer
+                                        accessible. Please click the button below to
+                                        browse other available rooms or create a new
+                                        one.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <DialogFooter>
+                                    <Button
+                                        variant="default"
+                                        onClick={() => {
+                                            setShowRoomClosedDialog(false);
+                                        }}
+                                        className="w-full"
+                                    >
+                                        Continue
+                                    </Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
+                    </>
+                )}
             </div>
         </>
     );

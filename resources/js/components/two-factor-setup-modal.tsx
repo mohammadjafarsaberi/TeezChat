@@ -1,5 +1,6 @@
 import { Form } from '@inertiajs/react';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
+import { motion } from 'motion/react';
 import { Check, Copy, ScanLine } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AlertError from '@/components/alert-error';
@@ -317,7 +318,12 @@ export default function TwoFactorSetupModal({
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="flex flex-col items-center space-y-5">
+                <motion.div
+                    className="flex flex-col items-center space-y-5"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2, ease: [0.2, 0.8, 0.4, 1] }}
+                >
                     {showVerificationStep ? (
                         <TwoFactorVerificationStep
                             onClose={onClose}
@@ -332,7 +338,7 @@ export default function TwoFactorSetupModal({
                             errors={errors}
                         />
                     )}
-                </div>
+                </motion.div>
             </DialogContent>
         </Dialog>
     );

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import { MessageBubble } from './message-bubble';
 
 interface Message {
@@ -65,27 +66,37 @@ export function MessageList({ messages, currentUserId }: MessageListProps) {
     return (
         <div ref={containerRef} className="flex-1 overflow-y-auto px-4 py-4">
             <div className="space-y-4">
-                {safeMessages.map((message, index) => {
-                    const prevMessage =
-                        index > 0 ? safeMessages[index - 1] : null;
-                    const showGroup =
-                        prevMessage?.user.id === message.user.id &&
-                        new Date(message.created_at).getTime() -
-                            new Date(prevMessage.created_at).getTime() <
-                            300000; // 5 minutes
+                <AnimatePresence initial={false}>
+                    {safeMessages.map((message, index) => {
+                        const prevMessage =
+                            index > 0 ? safeMessages[index - 1] : null;
+                        const showGroup =
+                            prevMessage?.user.id === message.user.id &&
+                            new Date(message.created_at).getTime() -
+                                new Date(prevMessage.created_at).getTime() <
+                                300000; // 5 minutes
 
-                    return (
-                        <div
-                            key={message.id}
-                            className={`${showGroup ? 'mt-1' : 'mt-4'}`}
-                        >
-                            <MessageBubble
-                                message={message}
-                                isOwn={message.user.id === currentUserId}
-                            />
-                        </div>
-                    );
-                })}
+                        return (
+                            <motion.div
+                                key={message.id}
+                                className={showGroup ? 'mt-1' : 'mt-4'}
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 4 }}
+                                transition={{
+                                    duration: 0.18,
+                                    ease: [0.22, 0.8, 0.4, 1],
+                                }}
+                                layout="position"
+                            >
+                                <MessageBubble
+                                    message={message}
+                                    isOwn={message.user.id === currentUserId}
+                                />
+                            </motion.div>
+                        );
+                    })}
+                </AnimatePresence>
             </div>
             <div ref={messagesEndRef} />
         </div>

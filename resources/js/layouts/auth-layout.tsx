@@ -1,4 +1,5 @@
 import AuthLayoutTemplate from '@/layouts/auth/auth-simple-layout';
+import { PageTransition } from '@/components/page-transition';
 
 export default function AuthLayout({
     children,
@@ -12,7 +13,7 @@ export default function AuthLayout({
 }) {
     return (
         <AuthLayoutTemplate title={title} description={description} {...props}>
-            {children}
+            <PageTransition>{children}</PageTransition>
         </AuthLayoutTemplate>
     );
 }

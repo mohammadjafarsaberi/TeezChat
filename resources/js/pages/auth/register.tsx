@@ -1,5 +1,6 @@
 import { Form, Head } from '@inertiajs/react';
 import { Camera } from 'lucide-react';
+import { motion } from 'motion/react';
 import { useState, useRef } from 'react';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
@@ -172,15 +173,21 @@ export default function Register() {
                                 />
                             </div>
 
-                            <Button
-                                type="submit"
-                                className="mt-2 w-full"
-                                tabIndex={5}
-                                data-test="register-user-button"
+                            <motion.div
+                                whileHover={{ y: -1 }}
+                                whileTap={{ scale: 0.98 }}
+                                transition={{ type: 'spring', stiffness: 260, damping: 22 }}
                             >
-                                {processing && <Spinner />}
-                                Create account
-                            </Button>
+                                <Button
+                                    type="submit"
+                                    className="mt-2 w-full"
+                                    tabIndex={5}
+                                    data-test="register-user-button"
+                                >
+                                    {processing && <Spinner />}
+                                    Create account
+                                </Button>
+                            </motion.div>
                         </div>
 
                         <div className="text-center text-sm text-muted-foreground">

@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { motion } from 'motion/react';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
@@ -86,16 +87,22 @@ export default function Login({
                                 <Label htmlFor="remember">Remember me</Label>
                             </div>
 
-                            <Button
-                                type="submit"
-                                className="mt-4 w-full"
-                                tabIndex={4}
-                                disabled={processing}
-                                data-test="login-button"
+                            <motion.div
+                                whileHover={{ y: -1 }}
+                                whileTap={{ scale: 0.98 }}
+                                transition={{ type: 'spring', stiffness: 260, damping: 22 }}
                             >
-                                {processing && <Spinner />}
-                                Log in
-                            </Button>
+                                <Button
+                                    type="submit"
+                                    className="mt-4 w-full"
+                                    tabIndex={4}
+                                    disabled={processing}
+                                    data-test="login-button"
+                                >
+                                    {processing && <Spinner />}
+                                    Log in
+                                </Button>
+                            </motion.div>
                         </div>
 
                         {canRegister && (

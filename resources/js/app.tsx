@@ -4,6 +4,12 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import Pusher from 'pusher-js';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import {
+    LazyMotion,
+    MotionConfig,
+    domAnimation,
+    useReducedMotion,
+} from 'motion/react';
 import '../css/app.css';
 import { ToastProvider } from '@/components/ui/toast';
 
@@ -51,6 +57,16 @@ if (import.meta.env.VITE_REVERB_APP_KEY) {
     );
 }
 
+function MotionProvider({ children }: { children: React.ReactNode }) {
+    const shouldReduceMotion = useReducedMotion();
+
+    return (
+        <MotionConfig reducedMotion={shouldReduceMotion ? 'always' : 'never'}>
+            <LazyMotion features={domAnimation}>{children}</LazyMotion>
+        </MotionConfig>
+    );
+}
+
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
     resolve: (name) =>
@@ -74,7 +90,9 @@ createInertiaApp({
         root.render(
             <StrictMode>
                 <ToastProvider>
-                    <App {...props} />
+                    <MotionProvider>
+                        <App {...props} />
+                    </MotionProvider>
                 </ToastProvider>
             </StrictMode>,
         );
