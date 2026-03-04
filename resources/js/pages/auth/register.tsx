@@ -44,7 +44,7 @@ export default function Register() {
             title="Create an account"
             description="Enter your details below to create your account"
         >
-            <Head title="Register" />
+            <Head title="Register - Teez Chat" />
             <Form
                 {...store.form()}
                 resetOnSuccess={['password', 'password_confirmation']}

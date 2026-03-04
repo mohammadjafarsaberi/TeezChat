@@ -50,7 +50,7 @@ export default function TwoFactorChallenge() {
             title={authConfigContent.title}
             description={authConfigContent.description}
         >
-            <Head title="Two-factor authentication" />
+            <Head title="Two-factor authentication - Teez Chat" />
 
             <div className="space-y-6">
                 <Form

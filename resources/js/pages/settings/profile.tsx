@@ -58,7 +58,7 @@ export default function Profile({
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Profile settings" />
+            <Head title="Profile settings - Teez Chat" />
 
             <h1 className="sr-only">Profile settings</h1>
 

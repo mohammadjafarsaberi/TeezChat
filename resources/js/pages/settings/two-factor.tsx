@@ -32,7 +32,7 @@ export default function TwoFactor({
 
     return (
         <div className="flex min-h-screen flex-col bg-background">
-            <Head title="Two-Factor Authentication" />
+            <Head title="Two-Factor Authentication - Teez Chat" />
 
             <div className="mx-auto w-full max-w-4xl px-4 py-8">
                 <Link

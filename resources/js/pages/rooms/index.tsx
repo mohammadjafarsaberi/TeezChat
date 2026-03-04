@@ -168,7 +168,7 @@ export default function RoomsIndex({ rooms: initialRooms, roomClosedRefresh, clo
 
     return (
         <>
-            <Head title="Rooms" />
+            <Head title="Rooms - Teez Chat" />
             <div className="flex min-h-screen flex-col bg-background">
                 <header className="border-b border-border bg-card">
                     <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-4">
@@ -178,7 +178,7 @@ export default function RoomsIndex({ rooms: initialRooms, roomClosedRefresh, clo
                                     <AppLogoIcon className="h-5 w-5 fill-current text-brand-accent sm:h-6 sm:w-6" />
                                 </div>
                                 <h1 className="text-lg font-bold text-foreground sm:text-2xl">
-                                    TeezChat
+                                    Teez Chat
                                 </h1>
                             </div>
                             <div className="flex items-center gap-2 sm:gap-3">

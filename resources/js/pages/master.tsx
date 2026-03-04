@@ -14,7 +14,7 @@ export default function Master({
 
     return (
         <>
-            <Head title="Real-time Chat">
+            <Head title="Real-time Chat - Teez Chat">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link
                     href="https://fonts.bunny.net/css?family=inter:400,500,600,700"
@@ -36,7 +36,7 @@ export default function Master({
                                 <AppLogoIcon className="h-5 w-5 fill-current text-brand-accent sm:h-6 sm:w-6" />
                             </motion.div>
                             <span className="text-lg font-bold text-foreground sm:text-xl">
-                                TeezChat
+                                Teez Chat
                             </span>
                         </div>
                         <div className="flex items-center gap-2 sm:gap-4">
@@ -87,7 +87,7 @@ export default function Master({
                                 transition={{ duration: 0.26, ease: [0.25, 0.8, 0.4, 1], delay: 0.05 }}
                             >
                                 Experience seamless, instant messaging with
-                                TeezChat. Create rooms, chat with friends, and
+                                Teez Chat. Create rooms, chat with friends, and
                                 stay connected—all in real-time.
                             </motion.p>
 

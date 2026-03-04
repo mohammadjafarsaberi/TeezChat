@@ -380,7 +380,7 @@ export default function RoomsShow({
 
     return (
         <>
-            <Head title={room.name} />
+            <Head title={`${room.name} - Teez Chat`} />
             <ChatLayout
                 sidebar={
                     <UserList

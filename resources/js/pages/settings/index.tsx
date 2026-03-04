@@ -32,7 +32,7 @@ export default function Settings({
 
     return (
         <div className="flex min-h-screen flex-col bg-background">
-            <Head title="Settings" />
+            <Head title="Settings - Teez Chat" />
 
             <div className="mx-auto w-full max-w-4xl px-4 py-8">
                 <div className="mb-8">

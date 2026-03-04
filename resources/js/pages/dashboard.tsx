@@ -14,7 +14,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Dashboard() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Dashboard" />
+            <Head title="Dashboard - Teez Chat" />
             <motion.div
                 className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
                 initial={{ opacity: 0, y: 12 }}
