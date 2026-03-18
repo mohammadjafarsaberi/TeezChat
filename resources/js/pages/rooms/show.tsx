@@ -87,10 +87,10 @@ export default function RoomsShow({
     // Ensure messages is always an array and sorted by created_at
     const safeMessages = Array.isArray(messages)
         ? [...messages].sort(
-              (a, b) =>
-                  new Date(a.created_at).getTime() -
-                  new Date(b.created_at).getTime(),
-          )
+            (a, b) =>
+                new Date(a.created_at).getTime() -
+                new Date(b.created_at).getTime(),
+        )
         : [];
     const typingUsers = useTyping(room.id, currentUser.id);
     const { onlineUsers, allMembers: presenceMembers } = usePresence(
@@ -134,16 +134,6 @@ export default function RoomsShow({
             setMemberCount(members.length);
         }
     }, [presenceMembers, members]);
-
-    // Debug: Log Echo status
-    useEffect(() => {
-        console.log('Echo status:', {
-            echoExists: !!window.Echo,
-            roomId: room.id,
-            initialMessagesCount: safeInitialMessages.length,
-            currentMessagesCount: safeMessages.length,
-        });
-    }, [room.id, safeInitialMessages.length, safeMessages.length]);
 
     // Listen for room closure event on the presence channel
     // Join the channel and set up listener (Echo handles multiple joins to same channel)
@@ -195,15 +185,8 @@ export default function RoomsShow({
             return;
         }
 
-        console.log('Sending message:', {
-            roomId: room.id,
-            body,
-            csrfToken: csrfToken.substring(0, 10) + '...',
-        });
-
         try {
             const url = `/rooms/${room.id}/messages`;
-            console.log('Fetching URL:', url);
 
             const response = await fetch(url, {
                 method: 'POST',
@@ -217,15 +200,8 @@ export default function RoomsShow({
                 body: JSON.stringify({ body }),
             });
 
-            console.log('Response received:', {
-                status: response.status,
-                statusText: response.statusText,
-                ok: response.ok,
-            });
-
             if (response.ok) {
                 const newMessage = await response.json();
-                console.log('Message sent successfully:', newMessage);
 
                 // Add message optimistically in case WebSocket is not connected
                 // The WebSocket will also add it, but we check for duplicates
@@ -237,9 +213,6 @@ export default function RoomsShow({
                     setTimeout(() => {
                         setMessages((prev) => {
                             if (!prev.some((m) => m.id === newMessage.id)) {
-                                console.log(
-                                    'WebSocket did not deliver message, adding directly',
-                                );
                                 return [...prev, newMessage];
                             }
                             return prev;
@@ -252,7 +225,6 @@ export default function RoomsShow({
 
                 try {
                     const contentType = response.headers.get('content-type');
-                    console.log('Error response content-type:', contentType);
 
                     if (
                         contentType &&
@@ -343,7 +315,7 @@ export default function RoomsShow({
                 const errorData = await response.json().catch(() => ({}));
                 alert(
                     errorData.message ||
-                        'Failed to leave room. Please try again.',
+                    'Failed to leave room. Please try again.',
                 );
             }
         } catch (error) {
@@ -535,7 +507,7 @@ export default function RoomsShow({
 
                     <Dialog
                         open={isRoomClosed}
-                        onOpenChange={() => {}}
+                        onOpenChange={() => { }}
                         modal={true}
                     >
                         <DialogContent

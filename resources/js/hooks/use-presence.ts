@@ -18,11 +18,8 @@ export function usePresence(roomId: number, currentUserId?: number) {
             return;
         }
 
-        console.log('Setting up presence for room:', roomId);
-
         window.Echo.join(`room.${roomId}`)
             .here((users: PresenceUser[]) => {
-                console.log('Presence: Users currently in room:', users);
                 const userIds = new Set(users.map((u) => u.id));
                 // If current user is provided and tab is hidden, remove them from online set
                 if (
@@ -36,7 +33,6 @@ export function usePresence(roomId: number, currentUserId?: number) {
                 setAllMembers(users);
             })
             .joining((user: PresenceUser) => {
-                console.log('Presence: User joined:', user);
                 // Don't add current user if tab is hidden
                 if (
                     currentUserId &&
@@ -54,7 +50,6 @@ export function usePresence(roomId: number, currentUserId?: number) {
                 });
             })
             .leaving((user: PresenceUser) => {
-                console.log('Presence: User left:', user);
                 setOnlineUsers((prev) => {
                     const next = new Set(prev);
                     next.delete(user.id);
@@ -62,13 +57,10 @@ export function usePresence(roomId: number, currentUserId?: number) {
                 });
                 setAllMembers((prev) => prev.filter((u) => u.id !== user.id));
             })
-            .error((error: any) => {
-                console.error('Presence channel error:', error);
-            });
+            .error((error: any) => {});
 
         return () => {
             if (window.Echo) {
-                console.log('Cleaning up presence for room:', roomId);
                 window.Echo.leave(`room.${roomId}`);
             }
         };
@@ -81,7 +73,6 @@ export function usePresence(roomId: number, currentUserId?: number) {
         const handleVisibilityChange = () => {
             if (document.hidden) {
                 // Tab lost focus - remove current user from online set
-                console.log('Tab lost focus - marking user as offline');
                 setOnlineUsers((prev) => {
                     const next = new Set(prev);
                     next.delete(currentUserId);
@@ -89,7 +80,6 @@ export function usePresence(roomId: number, currentUserId?: number) {
                 });
             } else {
                 // Tab regained focus - add current user back to online set if they're in the room
-                console.log('Tab regained focus - marking user as online');
                 setOnlineUsers((prev) => {
                     // Check if user is still a member of the room
                     const isMember = allMembers.some(

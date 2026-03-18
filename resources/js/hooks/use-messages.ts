@@ -38,8 +38,7 @@ export function useMessages(roomId: number, initialMessages: Message[]) {
     // This is a valid use case for setState in effect - syncing props to state
     useEffect(() => {
         const isFirstRender = prevRoomIdRef.current === null;
-        const roomChanged =
-            !isFirstRender && prevRoomIdRef.current !== roomId;
+        const roomChanged = !isFirstRender && prevRoomIdRef.current !== roomId;
 
         const prevMessages = prevInitialMessagesRef.current;
         const messagesChanged =
@@ -52,17 +51,6 @@ export function useMessages(roomId: number, initialMessages: Message[]) {
             });
 
         if (roomChanged || messagesChanged) {
-            console.log(
-                'Syncing initial messages:',
-                sortedInitialMessages.length,
-                'for room:',
-                roomId,
-                isFirstRender
-                    ? '(first render)'
-                    : roomChanged
-                        ? '(room changed)'
-                        : '(messages changed)',
-            );
             prevRoomIdRef.current = roomId;
             prevInitialMessagesRef.current = sortedInitialMessages;
             // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -78,41 +66,20 @@ export function useMessages(roomId: number, initialMessages: Message[]) {
             return;
         }
 
-        console.log('Joining presence channel:', `room.${roomId}`);
-
-        const channel = window.Echo.join(`room.${roomId}`)
-            .here((users: Array<{ id: number; name: string }>) => {
-                console.log('Users currently in room:', users);
-            })
-            .joining((user: { id: number; name: string }) => {
-                console.log('User joined room:', user);
-            })
-            .leaving((user: { id: number; name: string }) => {
-                console.log('User left room:', user);
-            })
-            .error((error: any) => {
-                console.error('Echo channel error:', error);
-            });
+        const channel = window.Echo.join(`room.${roomId}`);
 
         channel.listen('.message.sent', (data: Message) => {
-            console.log('Received message via WebSocket:', data);
             setMessages((prev) => {
                 // Avoid duplicates
                 if (prev.some((m) => m.id === data.id)) {
-                    console.log('Duplicate message ignored:', data.id);
                     return prev;
                 }
-                console.log(
-                    'Adding new message to list. Total messages:',
-                    prev.length + 1,
-                );
                 return [...prev, data];
             });
         });
 
         return () => {
             if (window.Echo) {
-                console.log('Leaving presence channel:', `room.${roomId}`);
                 window.Echo.leave(`room.${roomId}`);
             }
         };

@@ -50,12 +50,7 @@ if (import.meta.env.VITE_REVERB_APP_KEY) {
         },
     });
 
-    // Log Echo connection status
-    console.log('Laravel Echo initialized:', {
-        key: import.meta.env.VITE_REVERB_APP_KEY ? 'Set' : 'Missing',
-        host: import.meta.env.VITE_REVERB_HOST || 'localhost',
-        port: import.meta.env.VITE_REVERB_PORT || 8080,
-    });
+
 } else {
     console.warn(
         'VITE_REVERB_APP_KEY not found. WebSocket features will not work.',
