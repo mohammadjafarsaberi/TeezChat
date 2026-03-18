@@ -12,6 +12,11 @@ import {
 } from 'motion/react';
 import '../css/app.css';
 import { ToastProvider } from '@/components/ui/toast';
+import { configureEcho } from '@laravel/echo-react';
+
+configureEcho({
+    broadcaster: 'reverb',
+});
 
 const appName = import.meta.env.VITE_APP_NAME || 'Teez Chat';
 

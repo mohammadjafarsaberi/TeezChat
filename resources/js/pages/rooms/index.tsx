@@ -36,10 +36,11 @@ interface Room {
     created_by: {
         id: number;
         name: string;
+        avatar?: string;
     };
     member_count: number;
-    is_member: boolean;
-    is_full: boolean;
+    is_member?: boolean;
+    is_full?: boolean;
     last_message: {
         id: number;
         body: string;
@@ -80,6 +81,11 @@ export default function RoomsIndex({ rooms: initialRooms, roomClosedRefresh, clo
         });
     };
 
+    // Keep local rooms state in sync with server props
+    useEffect(() => {
+        setRooms(initialRooms);
+    }, [initialRooms]);
+
     // Show popup if user refreshed after room was closed
     useEffect(() => {
         if (roomClosedRefresh) {
@@ -93,13 +99,25 @@ export default function RoomsIndex({ rooms: initialRooms, roomClosedRefresh, clo
 
         const channel = window.Echo.channel('rooms');
 
-        channel.listen('.room.created', (data: Room) => {
+        channel.listen('.room.created', (payload: Room | Room[]) => {
+            const incomingRooms = Array.isArray(payload) ? payload : [payload];
+
+            const normalizedRooms = incomingRooms.map((room) => ({
+                ...room,
+                is_member: room.is_member ?? room.created_by?.id === currentUser.id,
+                is_full: room.is_full ?? room.member_count >= 5,
+            }));
+
             setRooms((prev) => {
-                // Avoid duplicates
-                if (prev.some((r) => r.id === data.id)) {
+                const filtered = normalizedRooms.filter(
+                    (incoming) => !prev.some((existing) => existing.id === incoming.id),
+                );
+
+                if (filtered.length === 0) {
                     return prev;
                 }
-                return [data, ...prev];
+
+                return [...filtered, ...prev];
             });
         });
 
@@ -112,7 +130,7 @@ export default function RoomsIndex({ rooms: initialRooms, roomClosedRefresh, clo
                 window.Echo.leave('rooms');
             }
         };
-    }, []);
+    }, [currentUser.id]);
 
     const handleCreateRoom = (e: React.FormEvent) => {
         e.preventDefault();
@@ -165,7 +183,6 @@ export default function RoomsIndex({ rooms: initialRooms, roomClosedRefresh, clo
             },
         );
     };
-
     return (
         <>
             <Head title="Rooms - Teez Chat" />
@@ -288,25 +305,13 @@ export default function RoomsIndex({ rooms: initialRooms, roomClosedRefresh, clo
                             </motion.div>
                         </motion.div>
                     ) : (
-                        <motion.div
-                            className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
-                            initial="hidden"
-                            animate="visible"
-                            variants={{
-                                hidden: {},
-                                visible: {
-                                    transition: { staggerChildren: 0.04 },
-                                },
-                            }}
-                        >
+                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {rooms.map((room) => (
                                 <motion.div
                                     key={room.id}
-                                    className="group rounded-xl border border-border bg-card p-4 shadow-sm transition-all hover:scale-[1.02] hover:border-brand-primary hover:shadow-lg sm:p-6"
-                                    variants={{
-                                        hidden: { opacity: 0, y: 12 },
-                                        visible: { opacity: 1, y: 0 },
-                                    }}
+                                    className="group rounded-xl border border-border bg-card p-4 shadow-sm transition-all hover:scale-[1.02] hover:border-brand-primary hover:shadow-lg sm:p-6 text-card-foreground"
+                                    initial={{ opacity: 0, y: 12 }}
+                                    animate={{ opacity: 1, y: 0 }}
                                     transition={{
                                         duration: 0.22,
                                         ease: [0.2, 0.8, 0.4, 1],
@@ -315,7 +320,7 @@ export default function RoomsIndex({ rooms: initialRooms, roomClosedRefresh, clo
                                     <div className="mb-3 flex items-start justify-between gap-2">
                                         <Link
                                             href={`/rooms/${room.id}`}
-                                            className="text-base font-semibold text-card-foreground group-hover:text-brand-primary sm:text-lg"
+                                            className="text-base font-semibold group-hover:text-brand-primary sm:text-lg"
                                         >
                                             {room.name}
                                         </Link>
@@ -407,7 +412,7 @@ export default function RoomsIndex({ rooms: initialRooms, roomClosedRefresh, clo
                                     </div>
                                 </motion.div>
                             ))}
-                        </motion.div>
+                        </div>
                     )}
                 </main>
 
