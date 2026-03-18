@@ -1,0 +1,20 @@
+name: Placeholder Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  placeholder-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: No-op deploy
+        run: |
+          echo "No deployment target configured."
+          echo "Skipping deployment and marking workflow as successful."
